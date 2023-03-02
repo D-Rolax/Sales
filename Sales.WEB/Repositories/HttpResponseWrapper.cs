@@ -13,7 +13,7 @@ namespace Sales.WEB.Repositories
         public bool Error { get; set; }
         public T? Response { get; set; }
         public HttpResponseMessage HttpResponseMessage { get; set; }
-        public async Task<string?> GetErrorMessage()
+        public async Task<string?> GetErrorMessageAsync()
         {
             if (!Error)
             {
