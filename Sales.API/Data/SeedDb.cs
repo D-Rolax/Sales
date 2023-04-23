@@ -25,12 +25,12 @@ namespace Sales.API.Data
             if (!_context.Countries.Any())  
             {
                 Response responseCountries = await _apiService.GetListAsync<CountryResponse>("/v1", "/countries");
-                //if (responseCountries.IsSuccess)
-                //{
+                if (responseCountries.IsSuccess)
+                {
                     List<CountryResponse> countries = (List<CountryResponse>)responseCountries.Result!;
                     foreach (CountryResponse countryResponse in countries)
                     {
-                        Country country = await _context.Countries!.FirstOrDefaultAsync(c => c.Name == countryResponse.Name!)!;
+                        Country? country = await _context.Countries.FirstOrDefaultAsync(c => c.Name == countryResponse.Name);
                         if (country == null)
                         {
                             country = new() { Name = countryResponse.Name!, States = new List<State>() };
@@ -75,7 +75,7 @@ namespace Sales.API.Data
                             }
                         }
                     }
-                //}
+                }
             }
 
         }
