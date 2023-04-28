@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Sales.API.Data;
+using Sales.Shared.DTOs;
 using Sales.Shared.Entities;
 
 namespace Sales.API.Helpers
@@ -10,12 +11,15 @@ namespace Sales.API.Helpers
         private readonly DataContext _dataContext;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly SignInManager<User> _signInManager;
 
-        public UserHelper(DataContext dataContext,UserManager<User> userManager,RoleManager<IdentityRole> roleManager)
+        public UserHelper(DataContext dataContext,UserManager<User> userManager,
+            RoleManager<IdentityRole> roleManager,SignInManager<User> signInManager)
         {
             _dataContext = dataContext;
             _userManager = userManager;
             _roleManager = roleManager;
+            this._signInManager = signInManager;
         }
         public async Task<IdentityResult> AddUserAsync(User user, string password)
         {
@@ -53,6 +57,17 @@ namespace Sales.API.Helpers
         public async Task<bool> IsUserInRoleAsync(User user, string roleName)
         {
             return await _userManager.IsInRoleAsync(user, roleName);
+        }
+
+        public async Task<SignInResult> LoginAsync(LoginDTO model)
+        {
+            return await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+
+        }
+
+        public async Task LogoutAsync()
+        {
+            await _signInManager.SignOutAsync();
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Sales.API.Data
             await _context.Database.EnsureCreatedAsync();
             await CheckCountriesAsync();
             await CheckRolesAsync();
-            await CheckUserAsync("1010", "Davi", "Rolax", "Rolax@yopmail.com", "72659616", "Calle la colorada", UserType.Admin);
+            await CheckUserAsync("1010", "David", "Rolax", "Rolax@yopmail.com", "72659616", "Calle la colorada", UserType.Admin);
 
         }
         private async Task CheckRolesAsync()
@@ -97,7 +97,6 @@ namespace Sales.API.Data
                                                     state.Cities.Add(new City() { Name = cityResponse.Name! });
                                                 }
                                             }
-                                        }
                                         if (state.CitiesNumber > 0)
                                         {
                                             country.States.Add(state);
@@ -105,6 +104,7 @@ namespace Sales.API.Data
                                     }
                                 }
                             }
+                                        }
                             if (country.StatesNumber > 0)
                             {
                                 _context.Countries.Add(country);
