@@ -8,7 +8,7 @@
 
 @if (country is null)
 {
-    <p>Cargando...</p>
+    <div class="spinner" />
 }else
 {
     <CountryForm @ref="countryForm" Country="country" OnValidSubmit="EditAsync" RetunAction="Return" />
