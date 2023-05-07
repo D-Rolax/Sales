@@ -31,6 +31,11 @@ namespace Sales.API.Helpers
             await _userManager.AddToRoleAsync(user, roleName);  
         }
 
+        public async Task<IdentityResult> ChangePasswordAsync(User user, string currentPassword, string newPassword)
+        {
+            return await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+        }
+
         public async Task CheckRoleAsync(string roleName)
         {
             bool roleExists = await _roleManager.RoleExistsAsync(roleName);
@@ -44,6 +49,16 @@ namespace Sales.API.Helpers
 
         }
 
+        public async Task<IdentityResult> ConfirmEmailAsync(User user, string token)
+        {
+            return await _userManager.ConfirmEmailAsync(user, token);
+        }
+
+        public async Task<string> GenerateEmailConfirmationTokenAsync(User user)
+        {
+            return await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        }
+
         public async  Task<User> GetUserAsync(string email)
         {
             var user =await _dataContext.Users
@@ -52,6 +67,17 @@ namespace Sales.API.Helpers
                 .ThenInclude(s=>s.Country!)
                 .FirstOrDefaultAsync(x => x.Email == email);
             return user!;
+        }
+
+        public async Task<User> GetUserAsync(Guid userId)
+        {
+            var user = await _dataContext.Users
+                .Include(u => u.City!)
+                .ThenInclude(c => c.State!)
+                .ThenInclude(s => s.Country!)
+                .FirstOrDefaultAsync(x => x.Id == userId.ToString());
+            return user!;
+
         }
 
         public async Task<bool> IsUserInRoleAsync(User user, string roleName)
@@ -68,6 +94,11 @@ namespace Sales.API.Helpers
         public async Task LogoutAsync()
         {
             await _signInManager.SignOutAsync();
+        }
+
+        public async Task<IdentityResult> UpdateUserAsync(User user)
+        {
+            return await _userManager.UpdateAsync(user);
         }
     }
 }
